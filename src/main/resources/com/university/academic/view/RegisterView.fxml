@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" prefHeight="500.0" prefWidth="400.0" spacing="15.0" style="-fx-background-color: #F0F2F5;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.university.academic.controller.RegisterController">
+    <padding>
+        <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+    </padding>
+    <Label text="Novo Usuário" textFill="#336699">
+        <font>
+            <Font name="System Bold" size="28.0" />
+        </font>
+    </Label>
+    <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
+        <VBox spacing="10.0" alignment="CENTER_LEFT" maxWidth="300.0" HBox.hgrow="ALWAYS">
+            <Label text="Nome de Usuário:" />
+            <TextField fx:id="txtUsername" promptText="Escolha um nome de usuário" HBox.hgrow="ALWAYS" />
+            <Label text="Email:" />
+            <TextField fx:id="txtEmail" promptText="Digite seu email" HBox.hgrow="ALWAYS" />
+            <Label text="Senha:" />
+            <PasswordField fx:id="txtPassword" promptText="Crie uma senha" HBox.hgrow="ALWAYS" />
+            <Label text="Confirmar Senha:" />
+            <PasswordField fx:id="txtConfirmPassword" promptText="Confirme sua senha" HBox.hgrow="ALWAYS" />
+            <Label text="Papel:" />
+            <ComboBox fx:id="cmbRole" prefWidth="200.0" promptText="Selecione o papel" HBox.hgrow="ALWAYS" />
+            <Label fx:id="lblMatricula" text="Matrícula:" visible="false" managed="false" />
+            <TextField fx:id="txtMatricula" promptText="Digite a matrícula (apenas para Estudante)" visible="false" managed="false" HBox.hgrow="ALWAYS" />
+            <Label fx:id="lblMessage" alignment="CENTER" prefHeight="17.0" prefWidth="320.0" textFill="RED" />
+        </VBox>
+    </HBox>
+    <Button fx:id="btnRegister" onAction="#handleRegister" prefWidth="200.0" text="Registrar" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 8;" />
+    <Button fx:id="btnBackToLogin" onAction="#handleBackToLogin" prefWidth="200.0" text="Voltar para Login" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 8;" />
+</VBox>

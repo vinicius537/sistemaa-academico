@@ -1,0 +1,17 @@
+[ {
+  "id" : "f382d661-1b89-49cf-abb4-113e7daa779b",
+  "idDisciplina" : "e1954aae-852e-4acb-b39e-7d7d00b887ec",
+  "nomeDisciplina" : "Introdução à Programação",
+  "idUsuario" : "fc6adfcf-9955-4b15-afa5-5cb59b19346e",
+  "nomeUsuario" : "Sergio",
+  "papelUsuario" : "Professor",
+  "idPlanoDeEnsino" : null
+}, {
+  "id" : "70695239-3206-4a06-b086-6883c877abc2",
+  "idDisciplina" : "c14547c4-f413-478a-ba79-1ac741ab5ae3",
+  "nomeDisciplina" : "Estruturas de Dados",
+  "idUsuario" : "fc6adfcf-9955-4b15-afa5-5cb59b19346e",
+  "nomeUsuario" : "Sergio",
+  "papelUsuario" : "Professor",
+  "idPlanoDeEnsino" : null
+} ]

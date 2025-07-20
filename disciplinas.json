@@ -1,0 +1,13 @@
+[ {
+  "id" : "e1954aae-852e-4acb-b39e-7d7d00b887ec",
+  "codigo" : "COMP101",
+  "nome" : "Introdução à Programação",
+  "cargaHoraria" : 60,
+  "descricao" : "Disciplina introdutória de programação."
+}, {
+  "id" : "8cb69e5e-bb8b-402f-9f6d-ea04ad87764a",
+  "codigo" : "COMP303",
+  "nome" : "Bancos de Dados",
+  "cargaHoraria" : 60,
+  "descricao" : "Conceitos e práticas de bancos de dados."
+} ]

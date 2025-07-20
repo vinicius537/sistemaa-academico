@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" prefHeight="300.0" prefWidth="400.0" spacing="20.0" style="-fx-background-color: #F0F2F5;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.university.academic.controller.VerificationController">
+    <padding>
+        <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+    </padding>
+    <Label text="Verificação de Conta" textFill="#336699">
+        <font>
+            <Font name="System Bold" size="28.0" />
+        </font>
+    </Label>
+    <Label text="Um código de 6 dígitos foi 'enviado' para seu email." textFill="#555555" textAlignment="CENTER" wrapText="true">
+        <font>
+            <Font size="14.0" />
+        </font>
+    </Label>
+    <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
+        <VBox spacing="10.0" alignment="CENTER" maxWidth="150.0" HBox.hgrow="ALWAYS">
+            <Label text="Código de Verificação:" />
+            <TextField fx:id="txtVerificationCode" promptText="Digite o código aqui" alignment="CENTER" HBox.hgrow="ALWAYS" />
+            <Label fx:id="lblMessage" alignment="CENTER" prefHeight="17.0" prefWidth="320.0" textFill="RED" />
+        </VBox>
+    </HBox>
+    <Button fx:id="btnVerify" onAction="#handleVerify" prefWidth="200.0" text="Verificar" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 8;" />
+    <Button fx:id="btnBackToLogin" onAction="#handleBackToLogin" prefWidth="200.0" text="Voltar para Login" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 8;" />
+</VBox>

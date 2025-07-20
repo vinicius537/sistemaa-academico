@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="750.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.university.academic.controller.PlanoDeEnsinoController">
+    <top>
+        <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: #336699; -fx-padding: 15;">
+            <Label fx:id="lblTituloForm" text="Novo Plano de Ensino" textFill="WHITE">
+                <font>
+                    <Font name="System Bold" size="24.0" />
+                </font>
+            </Label>
+        </VBox>
+    </top>
+    <center>
+        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+            <content>
+                <VBox alignment="TOP_CENTER" spacing="10.0" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS">
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                    </padding>
+                    <GridPane hgap="10.0" vgap="10.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                        <padding>
+                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                        </padding>
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="150.0" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        </rowConstraints>
+                        <Label text="ID (automático):" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <TextField fx:id="txtId" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="0" HBox.hgrow="ALWAYS" />
+
+                        <Label text="Código da Disciplina:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtCodigoDisciplina" GridPane.columnIndex="1" GridPane.rowIndex="1" HBox.hgrow="ALWAYS" />
+
+                        <Label text="Nome da Disciplina:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                        <TextField fx:id="txtNomeDisciplina" GridPane.columnIndex="1" GridPane.rowIndex="2" HBox.hgrow="ALWAYS" />
+
+                        <Label text="Semestre Letivo:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                        <TextField fx:id="txtSemestreLetivo" GridPane.columnIndex="1" GridPane.rowIndex="3" HBox.hgrow="ALWAYS" />
+
+                        <Label text="Professor Responsável:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                        <TextField fx:id="txtProfessorResponsavel" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="4" HBox.hgrow="ALWAYS" />
+
+                        <Label text="Ementa:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                        <TextArea fx:id="txtEmenta" prefHeight="80.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" />
+
+                        <Label text="Objetivos:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+                        <TextArea fx:id="txtObjetivos" prefHeight="80.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" />
+
+                        <Label text="Conteúdo Programático:" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+                        <TextArea fx:id="txtConteudoProgramatico" prefHeight="80.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" />
+
+                        <Label text="Metodologia:" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+                        <TextArea fx:id="txtMetodologia" prefHeight="80.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="8" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" />
+
+                        <Label text="Avaliação:" GridPane.columnIndex="0" GridPane.rowIndex="9" />
+                        <TextArea fx:id="txtAvaliacao" prefHeight="80.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" />
+
+                        <Label text="Bibliografia Básica:" GridPane.columnIndex="0" GridPane.rowIndex="10" />
+                        <TextArea fx:id="txtBibliografiaBasica" prefHeight="80.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="10" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" />
+
+                        <Label text="Bibliografia Complementar:" GridPane.columnIndex="0" GridPane.rowIndex="11" />
+                        <TextArea fx:id="txtBibliografiaComplementar" prefHeight="80.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="11" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" />
+
+                        <Label text="Anexar PDF:" GridPane.columnIndex="0" GridPane.rowIndex="12" />
+                        <HBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="12" HBox.hgrow="ALWAYS">
+                            <TextField fx:id="txtCaminhoPdf" editable="false" HBox.hgrow="ALWAYS" promptText="Nenhum arquivo selecionado" />
+                            <Button fx:id="btnSelecionarPdf" onAction="#handleSelecionarPdf" text="Selecionar PDF" style="-fx-background-color: #5cb85c; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;" />
+                        </HBox>
+                    </GridPane>
+                    <HBox alignment="CENTER_RIGHT" spacing="10.0" HBox.hgrow="ALWAYS">
+                        <Button fx:id="btnSalvarPlano" onAction="#handleSalvarPlano" text="Salvar" style="-fx-background-color: #008CBA; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 15; -fx-background-radius: 5;" />
+                        <Button fx:id="btnCancelar" onAction="#handleCancelar" text="Cancelar" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 15; -fx-background-radius: 5;" />
+                    </HBox>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>

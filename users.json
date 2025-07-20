@@ -1,0 +1,33 @@
+[ {
+  "id" : "363d6a69-bb28-4a25-8ab9-8b82999a37e0",
+  "nomeUsuario" : "diretor",
+  "senha" : "diretor123!",
+  "email" : "diretor@universidade.com",
+  "papel" : "Diretor",
+  "matricula" : null,
+  "verified" : true
+}, {
+  "id" : "5ee7e6e8-2cff-48e4-8189-9ddf62a02d00",
+  "nomeUsuario" : "Lucas",
+  "senha" : "Conta123!",
+  "email" : "lucas@gmail.com",
+  "papel" : "Estudante",
+  "matricula" : "755025",
+  "verified" : true
+}, {
+  "id" : "fc6adfcf-9955-4b15-afa5-5cb59b19346e",
+  "nomeUsuario" : "Sergio",
+  "senha" : "Conta123!",
+  "email" : "sergio@gmail.com",
+  "papel" : "Professor",
+  "matricula" : null,
+  "verified" : true
+}, {
+  "id" : "71824479-fe2f-4b78-b1ed-23f0dce4fb82",
+  "nomeUsuario" : "Marcos",
+  "senha" : "Conta123!",
+  "email" : "marcos@gmail.com",
+  "papel" : "Coordenador",
+  "matricula" : null,
+  "verified" : true
+} ]
