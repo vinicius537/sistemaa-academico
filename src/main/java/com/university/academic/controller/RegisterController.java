@@ -26,8 +26,8 @@ public class RegisterController {
     @FXML private PasswordField txtConfirmPassword;
     @FXML private ComboBox<String> cmbRole;
     @FXML private Label lblMessage;
-    @FXML private Label lblMatricula; // NOVO: Label da matrícula
-    @FXML private TextField txtMatricula; // NOVO: Campo da matrícula
+    @FXML private Label lblMatricula;
+    @FXML private TextField txtMatricula;
 
     private UserService userService;
     private SceneManager sceneManager;
@@ -42,7 +42,6 @@ public class RegisterController {
         cmbRole.setItems(FXCollections.observableArrayList("Estudante", "Professor", "Coordenador", "Diretor"));
         cmbRole.getSelectionModel().select("Estudante");
 
-        // NOVO: Listener para mostrar/esconder campo de matrícula
         cmbRole.getSelectionModel().selectedItemProperty().addListener((obs, oldRole, newRole) -> {
             boolean isStudent = "Estudante".equalsIgnoreCase(newRole);
             lblMatricula.setVisible(isStudent);
@@ -50,7 +49,6 @@ public class RegisterController {
             txtMatricula.setVisible(isStudent);
             txtMatricula.setManaged(isStudent);
         });
-        // Inicializa a visibilidade do campo de matrícula
         boolean isStudentInitial = "Estudante".equalsIgnoreCase(cmbRole.getValue());
         lblMatricula.setVisible(isStudentInitial);
         lblMatricula.setManaged(isStudentInitial);
@@ -65,7 +63,7 @@ public class RegisterController {
         String password = txtPassword.getText();
         String confirmPassword = txtConfirmPassword.getText();
         String role = cmbRole.getValue();
-        String matricula = txtMatricula.getText(); // NOVO: Obtém a matrícula
+        String matricula = txtMatricula.getText();
 
         if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || role == null) {
             lblMessage.setText("Todos os campos são obrigatórios.");
@@ -79,7 +77,6 @@ public class RegisterController {
             return;
         }
 
-        // NOVO: Validação específica para matrícula de estudante
         if ("Estudante".equalsIgnoreCase(role) && (matricula == null || matricula.trim().isEmpty())) {
             lblMessage.setText("Matrícula é obrigatória para Estudantes.");
             lblMessage.setTextFill(javafx.scene.paint.Color.RED);
@@ -87,7 +84,6 @@ public class RegisterController {
         }
 
         try {
-            // NOVO: Passa a matrícula para o serviço
             userService.registrarNovoUsuario(username, password, email, role, matricula.trim()); // trim() para remover espaços extras
             lblMessage.setText("Usuário registrado com sucesso! Redirecionando para verificação...");
             lblMessage.setTextFill(javafx.scene.paint.Color.GREEN);

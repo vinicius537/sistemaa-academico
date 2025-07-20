@@ -39,7 +39,6 @@ import java.util.stream.Collectors;
 import javafx.geometry.Insets;
 
 public class PlanoDeEnsinoDetailController implements Observer {
-    // --- Componentes de Detalhes do Plano ---
     @FXML private Label lblTituloPlano;
     @FXML private TextField txtId;
     @FXML private TextField txtCodigoDisciplina;
@@ -56,21 +55,20 @@ public class PlanoDeEnsinoDetailController implements Observer {
     @FXML private TextField txtCaminhoPdf;
     @FXML private Button btnVerPdf;
 
-    // --- Componentes da Seção de Comentários ---
     @FXML private TextArea txtNovoComentario;
     @FXML private Button btnEnviarComentario;
     @FXML private Button btnLimparComentario;
     @FXML private Label lblComentarioMessage;
-    @FXML private VBox vboxComentarios; // Contêiner para adicionar comentários dinamicamente
-    @FXML private Label lblNoComments; // Label para "Nenhum comentário ainda."
+    @FXML private VBox vboxComentarios;
+    @FXML private Label lblNoComments;
 
     private PlanoDeEnsinoService planoDeEnsinoService;
     private ComentarioService comentarioService;
     private UserService userService;
-    private SceneManager sceneManager; // Mantido para consistência, mas não usado diretamente para voltar
+    private SceneManager sceneManager;
 
-    private PlanoDeEnsino planoAtual; // O plano de ensino que está sendo visualizado
-    private Stage detailStage; // Referência ao Stage desta tela modal
+    private PlanoDeEnsino planoAtual;
+    private Stage detailStage;
 
     public PlanoDeEnsinoDetailController() {
         this.planoDeEnsinoService = PlanoDeEnsinoService.getInstance();
@@ -78,29 +76,24 @@ public class PlanoDeEnsinoDetailController implements Observer {
         this.userService = UserService.getInstance();
         this.sceneManager = SceneManager.getInstance();
 
-        // Registra este controlador como observador do ComentarioService
         this.comentarioService.addObserver(this);
     }
 
-    // Setter para injetar o Stage desta tela
     public void setDetailStage(Stage stage) {
         this.detailStage = stage;
     }
 
-    // Método para injetar o PlanoDeEnsino a ser exibido
     public void setPlanoDeEnsino(PlanoDeEnsino plano) {
         this.planoAtual = plano;
         preencherDetalhesPlano();
-        carregarComentarios(); // Carrega os comentários ao definir o plano
-        configurarAcessoComentarios(); // Configura visibilidade da área de comentários
+        carregarComentarios();
+        configurarAcessoComentarios();
     }
 
     @FXML
     public void initialize() {
-        // A inicialização principal ocorre em setPlanoDeEnsino, pois o plano não está disponível no construtor FXML
     }
 
-    // Preenche os campos de detalhes do plano de ensino
     private void preencherDetalhesPlano() {
         if (planoAtual != null) {
             lblTituloPlano.setText("Detalhes do Plano: " + planoAtual.getNomeDisciplina());
@@ -123,7 +116,6 @@ public class PlanoDeEnsinoDetailController implements Observer {
         }
     }
 
-    // Configura a visibilidade da área de comentários com base no papel do usuário
     private void configurarAcessoComentarios() {
         Usuario currentUser = userService.getCurrentUser();
         if (currentUser == null) {
@@ -135,7 +127,6 @@ public class PlanoDeEnsinoDetailController implements Observer {
             return;
         }
 
-        // Estudantes e Professores podem comentar
         boolean canComment = "Estudante".equalsIgnoreCase(currentUser.getPapel()) || "Professor".equalsIgnoreCase(currentUser.getPapel());
         btnEnviarComentario.setDisable(!canComment);
         btnLimparComentario.setDisable(!canComment);
@@ -155,13 +146,12 @@ public class PlanoDeEnsinoDetailController implements Observer {
 
         List<Comentario> todosComentariosDoPlano = comentarioService.buscarComentariosPorPlanoDeEnsino(planoAtual.getId());
 
-        // Separa comentários principais de respostas
         List<Comentario> comentariosPrincipais = todosComentariosDoPlano.stream()
                 .filter(c -> c.getIdComentarioPai() == null || c.getIdComentarioPai().isEmpty())
                 .sorted(Comparator.comparing(Comentario::getDataHora)) // Ordena por data
                 .collect(Collectors.toList());
 
-        vboxComentarios.getChildren().clear(); // Limpa comentários anteriores
+        vboxComentarios.getChildren().clear();
         if (comentariosPrincipais.isEmpty()) {
             lblNoComments.setVisible(true);
             lblNoComments.setManaged(true);
@@ -169,7 +159,7 @@ public class PlanoDeEnsinoDetailController implements Observer {
             lblNoComments.setVisible(false);
             lblNoComments.setManaged(false);
             for (Comentario comentario : comentariosPrincipais) {
-                adicionarComentarioNaUI(comentario, 0); // Nível 0 para comentários principais
+                adicionarComentarioNaUI(comentario, 0);
 
                 // Adiciona respostas
                 List<Comentario> respostas = todosComentariosDoPlano.stream()
@@ -185,18 +175,16 @@ public class PlanoDeEnsinoDetailController implements Observer {
 
     // Adiciona um comentário (ou resposta) à UI
     private void adicionarComentarioNaUI(Comentario comentario, int nivelIndentacao) {
-        VBox comentarioBox = new VBox(5); // VBox para o comentário individual
+        VBox comentarioBox = new VBox(5);
         comentarioBox.setPadding(new Insets(5));
         comentarioBox.setStyle("-fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-background-color: #f9f9f9; -fx-background-radius: 5; -fx-border-radius: 5;");
         comentarioBox.setPrefWidth(Double.MAX_VALUE); // Para que o VBox se expanda horizontalmente
 
-        // Indentação para respostas
         if (nivelIndentacao > 0) {
             comentarioBox.setPadding(new Insets(5, 5, 5, 20 * nivelIndentacao)); // Adiciona padding à esquerda
             comentarioBox.setStyle("-fx-border-color: #d0d0d0; -fx-border-width: 1; -fx-background-color: #f0f0f0; -fx-background-radius: 5; -fx-border-radius: 5;");
         }
 
-        // Cabeçalho do comentário (Autor e Data/Hora)
         HBox headerBox = new HBox(10);
         Label autorLabel = new Label(comentario.getNomeAutor());
         autorLabel.setFont(Font.font("System", FontWeight.BOLD, 12));
@@ -208,17 +196,14 @@ public class PlanoDeEnsinoDetailController implements Observer {
 
         headerBox.getChildren().addAll(autorLabel, dataHoraLabel);
 
-        // Conteúdo do comentário
         TextFlow contentTextFlow = new TextFlow(new Text(comentario.getConteudo()));
         contentTextFlow.setPrefWidth(Double.MAX_VALUE); // Permite que o TextFlow se expanda
 
-        // Botões de Ação (Responder, Excluir)
         HBox actionBox = new HBox(5);
         actionBox.setAlignment(Pos.CENTER_RIGHT); // Alinha botões à direita
 
         Usuario currentUser = userService.getCurrentUser();
         if (currentUser != null) {
-            // Botão Responder (visível para todos os logados que podem comentar)
             boolean canComment = "Estudante".equalsIgnoreCase(currentUser.getPapel()) || "Professor".equalsIgnoreCase(currentUser.getPapel());
             if (canComment) {
                 Button btnResponder = new Button("Responder");
@@ -226,21 +211,17 @@ public class PlanoDeEnsinoDetailController implements Observer {
                 btnResponder.setOnAction(e -> {
                     txtNovoComentario.setText("@" + comentario.getNomeAutor() + " ");
                     txtNovoComentario.requestFocus();
-                    // Para garantir que a resposta seja associada ao comentário correto,
-                    // podemos usar uma propriedade temporária ou um campo oculto.
-                    // Para este exemplo, a lógica de handleEnviarComentario tentará inferir o pai pelo @nome.
+
                 });
                 actionBox.getChildren().add(btnResponder);
             }
 
-            // Botão Excluir (visível com base na permissão)
             boolean canDelete = false;
             if (comentario.getIdAutor().equals(currentUser.getId())) { // É o próprio autor
                 canDelete = true;
             } else if ("Coordenador".equalsIgnoreCase(currentUser.getPapel()) || "Diretor".equalsIgnoreCase(currentUser.getPapel())) { // Coordenador/Diretor
                 canDelete = true;
             } else if ("Professor".equalsIgnoreCase(currentUser.getPapel())) { // Professor
-                // Verifica se o professor é responsável pelo plano
                 Optional<PlanoDeEnsino> planoOpt = planoDeEnsinoService.buscarPlanoPorId(comentario.getIdPlanoDeEnsino());
                 if (planoOpt.isPresent() && planoOpt.get().getProfessorResponsavel().equals(currentUser.getNomeUsuario())) {
                     canDelete = true;
@@ -259,7 +240,6 @@ public class PlanoDeEnsinoDetailController implements Observer {
         vboxComentarios.getChildren().add(comentarioBox);
     }
 
-    // Lida com o clique no botão "Ver PDF"
     @FXML
     private void handleVerPdf(ActionEvent event) {
         if (planoAtual == null || planoAtual.getCaminhoPdf() == null || planoAtual.getCaminhoPdf().isEmpty()) {
@@ -281,7 +261,6 @@ public class PlanoDeEnsinoDetailController implements Observer {
         }
     }
 
-    // Lida com o envio de um novo comentário
     @FXML
     private void handleEnviarComentario(ActionEvent event) {
         String conteudo = txtNovoComentario.getText();
@@ -292,12 +271,10 @@ public class PlanoDeEnsinoDetailController implements Observer {
         }
 
         String idComentarioPai = null;
-        // Lógica simplificada para identificar se é uma resposta (@nome)
         if (conteudo.startsWith("@")) {
             int spaceIndex = conteudo.indexOf(" ");
             if (spaceIndex > 0) {
                 String mentionedUsername = conteudo.substring(1, spaceIndex);
-                // Busca o comentário principal do usuário mencionado
                 Optional<Comentario> parentCommentOpt = comentarioService.buscarComentariosPorPlanoDeEnsino(planoAtual.getId()).stream()
                         .filter(c -> c.getNomeAutor().equalsIgnoreCase(mentionedUsername) && (c.getIdComentarioPai() == null || c.getIdComentarioPai().isEmpty()))
                         .findFirst();
@@ -322,14 +299,12 @@ public class PlanoDeEnsinoDetailController implements Observer {
         }
     }
 
-    // Lida com o clique no botão "Limpar" da área de comentários
     @FXML
     private void handleLimparComentario(ActionEvent event) {
         txtNovoComentario.clear();
         lblComentarioMessage.setText("");
     }
 
-    // Lida com a exclusão de um comentário (chamado pelos botões dinâmicos)
     private void excluirComentario(String idComentario) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Tem certeza que deseja excluir este comentário e suas respostas?", javafx.scene.control.ButtonType.YES, javafx.scene.control.ButtonType.NO);
         Optional<javafx.scene.control.ButtonType> result = alert.showAndWait();
@@ -349,28 +324,23 @@ public class PlanoDeEnsinoDetailController implements Observer {
         }
     }
 
-    // Lida com o clique no botão "Voltar"
     @FXML
     private void handleBack(ActionEvent event) {
         if (detailStage != null) {
-            detailStage.close(); // Fecha a janela modal de detalhes
+            detailStage.close();
         }
-        // Não precisa chamar sceneManager.loadScene aqui, pois a tela principal já está aberta por baixo
     }
 
     // Método do padrão Observer: Atualiza a lista de comentários quando o ComentarioService notifica
     @Override
     @SuppressWarnings("unchecked")
     public void update(Object data) {
-        // Garante que a atualização da UI ocorra na JavaFX Application Thread
         Platform.runLater(() -> {
             if (data instanceof List && planoAtual != null) {
-                // Filtra apenas os comentários para o plano atual
                 List<Comentario> comentariosAtualizados = ((List<Comentario>) data).stream()
                         .filter(c -> c.getIdPlanoDeEnsino().equals(planoAtual.getId()))
                         .collect(Collectors.toList());
-                // Recarrega os comentários na UI
-                carregarComentarios(); // Recarrega todos os comentários para o plano atual
+                carregarComentarios();
             }
         });
     }

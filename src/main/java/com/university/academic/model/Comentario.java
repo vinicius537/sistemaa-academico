@@ -1,23 +1,21 @@
 package com.university.academic.model;
 
-import java.time.LocalDateTime; // Para registrar a data e hora do comentário
+import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.UUID; // Para gerar IDs únicos
+import java.util.UUID;
 
 public class Comentario {
     private String id;
-    private String idPlanoDeEnsino; // ID do Plano de Ensino ao qual o comentário pertence
-    private String idAutor;          // ID do Usuário que fez o comentário
-    private String nomeAutor;        // Nome do Usuário que fez o comentário (para exibição)
-    private String conteudo;         // Conteúdo textual do comentário
-    private LocalDateTime dataHora;  // Data e hora em que o comentário foi feito
-    private String idComentarioPai;  // ID do comentário pai, se for uma resposta (null se for um comentário principal)
+    private String idPlanoDeEnsino;
+    private String idAutor;
+    private String nomeAutor;
+    private String conteudo;
+    private LocalDateTime dataHora;
+    private String idComentarioPai;
 
-    // Construtor padrão para desserialização do Jackson
     public Comentario() {
     }
 
-    // Construtor completo
     public Comentario(String id, String idPlanoDeEnsino, String idAutor, String nomeAutor,
                       String conteudo, LocalDateTime dataHora, String idComentarioPai) {
         this.id = id;
@@ -29,12 +27,10 @@ public class Comentario {
         this.idComentarioPai = idComentarioPai;
     }
 
-    // Construtor para novos comentários/respostas (ID será gerado, dataHora será definida ao criar)
     public Comentario(String idPlanoDeEnsino, String idAutor, String nomeAutor, String conteudo, String idComentarioPai) {
         this(null, idPlanoDeEnsino, idAutor, nomeAutor, conteudo, LocalDateTime.now(), idComentarioPai);
     }
 
-    // Getters e Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     public String getIdPlanoDeEnsino() { return idPlanoDeEnsino; }

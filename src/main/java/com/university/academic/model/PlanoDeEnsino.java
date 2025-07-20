@@ -15,14 +15,12 @@ public class PlanoDeEnsino {
     private String bibliografiaBasica;
     private String bibliografiaComplementar;
     private String status;
-    private String professorResponsavel; // ID ou nome do professor
-    private String caminhoPdf; // NOVO: Caminho do arquivo PDF do plano
+    private String professorResponsavel;
+    private String caminhoPdf;
 
-    // Construtor padrão (sem argumentos) - Necessário para a desserialização do Jackson
     public PlanoDeEnsino() {
     }
 
-    // Construtor completo (AGORA COM 13 ARGUMENTOS)
     public PlanoDeEnsino(String id, String codigoDisciplina, String nomeDisciplina, String semestreLetivo,
                          String ementa, String objetivos, String conteudoProgramatico, String metodologia,
                          String avaliacao, String bibliografiaBasica, String bibliografiaComplementar,
@@ -43,7 +41,6 @@ public class PlanoDeEnsino {
         this.status = "Rascunho";
     }
 
-    // Getters e Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     public String getCodigoDisciplina() { return codigoDisciplina; }

@@ -38,14 +38,14 @@ public class DisciplinaAssociacaoController implements Observer {
 
     @FXML private ComboBox<Disciplina> cmbAssociacaoDisciplina;
     @FXML private ComboBox<Usuario> cmbAssociacaoUsuario;
-    @FXML private ComboBox<String> cmbAssociacaoPapel; // Papel na associação (Professor/Estudante)
+    @FXML private ComboBox<String> cmbAssociacaoPapel;
     @FXML private Label lblAssociacaoMessage;
     @FXML private TableView<AssociacaoDisciplinaUsuario> tabelaAssociacoes;
     @FXML private TableColumn<AssociacaoDisciplinaUsuario, String> colAssociacaoId;
     @FXML private TableColumn<AssociacaoDisciplinaUsuario, String> colAssociacaoDisciplina;
     @FXML private TableColumn<AssociacaoDisciplinaUsuario, String> colAssociacaoUsuario;
     @FXML private TableColumn<AssociacaoDisciplinaUsuario, String> colAssociacaoPapel;
-    @FXML private TableColumn<AssociacaoDisciplinaUsuario, String> colAssociacaoPlano; // ID do Plano de Ensino
+    @FXML private TableColumn<AssociacaoDisciplinaUsuario, String> colAssociacaoPlano;
     @FXML private TableColumn<AssociacaoDisciplinaUsuario, Void> colAssociacaoAcoes;
 
     private DisciplinaService disciplinaService;
@@ -86,7 +86,7 @@ public class DisciplinaAssociacaoController implements Observer {
         cmbAssociacaoPapel.getSelectionModel().selectedItemProperty().addListener((obs, oldPapel, newPapel) -> {
             popularComboBoxUsuariosPorPapel(newPapel);
         });
-        cmbAssociacaoPapel.getSelectionModel().selectFirst(); // Seleciona "Professor" por padrão
+        cmbAssociacaoPapel.getSelectionModel().selectFirst();
     }
 
     private void configurarTabelaDisciplinas() {
@@ -161,7 +161,7 @@ public class DisciplinaAssociacaoController implements Observer {
             lblDisciplinaMessage.setTextFill(javafx.scene.paint.Color.GREEN);
             carregarDisciplinasNaTabela();
             limparCamposDisciplina();
-            popularComboBoxesAssociacao(); // Atualiza ComboBox de disciplina
+            popularComboBoxesAssociacao();
         } catch (NumberFormatException e) {
             lblDisciplinaMessage.setText("Carga Horária deve ser um número válido.");
             lblDisciplinaMessage.setTextFill(javafx.scene.paint.Color.RED);
@@ -200,7 +200,7 @@ public class DisciplinaAssociacaoController implements Observer {
                 lblDisciplinaMessage.setTextFill(javafx.scene.paint.Color.GREEN);
                 carregarDisciplinasNaTabela();
                 limparCamposDisciplina();
-                popularComboBoxesAssociacao(); // Atualiza ComboBox de disciplina
+                popularComboBoxesAssociacao();
             } catch (Exception e) {
                 e.printStackTrace();
                 lblDisciplinaMessage.setText("Erro ao excluir disciplina: " + e.getMessage());
@@ -215,7 +215,7 @@ public class DisciplinaAssociacaoController implements Observer {
         colAssociacaoDisciplina.setCellValueFactory(new PropertyValueFactory<>("nomeDisciplina"));
         colAssociacaoUsuario.setCellValueFactory(new PropertyValueFactory<>("nomeUsuario"));
         colAssociacaoPapel.setCellValueFactory(new PropertyValueFactory<>("papelUsuario"));
-        colAssociacaoPlano.setCellValueFactory(new PropertyValueFactory<>("idPlanoDeEnsino")); // Pode ser formatado para nome do plano
+        colAssociacaoPlano.setCellValueFactory(new PropertyValueFactory<>("idPlanoDeEnsino"));
 
         listaObservavelAssociacoes = FXCollections.observableArrayList();
         tabelaAssociacoes.setItems(listaObservavelAssociacoes);
@@ -257,7 +257,7 @@ public class DisciplinaAssociacaoController implements Observer {
                 .filter(u -> u.getPapel().equalsIgnoreCase(papel))
                 .collect(Collectors.toList());
         cmbAssociacaoUsuario.setItems(FXCollections.observableArrayList(usuariosFiltrados));
-        cmbAssociacaoUsuario.getSelectionModel().clearSelection(); // Limpa seleção anterior
+        cmbAssociacaoUsuario.getSelectionModel().clearSelection();
     }
 
     @FXML
@@ -298,7 +298,7 @@ public class DisciplinaAssociacaoController implements Observer {
     private void limparCamposAssociacao() {
         cmbAssociacaoDisciplina.getSelectionModel().clearSelection();
         cmbAssociacaoUsuario.getSelectionModel().clearSelection();
-        cmbAssociacaoPapel.getSelectionModel().selectFirst(); // Volta para o padrão
+        cmbAssociacaoPapel.getSelectionModel().selectFirst();
         lblAssociacaoMessage.setText("");
         tabelaAssociacoes.getSelectionModel().clearSelection();
     }
@@ -333,11 +333,10 @@ public class DisciplinaAssociacaoController implements Observer {
     @Override
     @SuppressWarnings("unchecked")
     public void update(Object data) {
-        // Este método é chamado quando o AssociacaoService notifica uma mudança
         if (data instanceof List) {
             List<AssociacaoDisciplinaUsuario> associacoesAtualizadas = (List<AssociacaoDisciplinaUsuario>) data;
             if (listaObservavelAssociacoes != null) {
-                listaObservavelAssociacoes.setAll(associacoesAtualizadas); // Atualiza a tabela de associações
+                listaObservavelAssociacoes.setAll(associacoesAtualizadas);
             }
         }
     }

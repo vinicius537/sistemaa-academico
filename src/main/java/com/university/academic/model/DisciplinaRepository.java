@@ -11,19 +11,17 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class DisciplinaRepository {
-    private static DisciplinaRepository instance; // Instância Singleton
-    private List<Disciplina> disciplinas; // Simula o banco de dados de disciplinas
-    private final String DATA_FILE = "disciplinas.json"; // Nome do arquivo para disciplinas
+    private static DisciplinaRepository instance;
+    private List<Disciplina> disciplinas;
+    private final String DATA_FILE = "disciplinas.json";
     private ObjectMapper objectMapper;
 
-    // Construtor privado para o Singleton
     private DisciplinaRepository() {
         this.objectMapper = new ObjectMapper();
         this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
         this.disciplinas = carregarDisciplinasDoArquivo();
 
-        // Adiciona algumas disciplinas de exemplo se o arquivo estiver vazio
         if (this.disciplinas.isEmpty()) {
             System.out.println("DEBUG: Arquivo de disciplinas vazio ou não encontrado. Inicializando com disciplinas padrão.");
             disciplinas.add(new Disciplina(UUID.randomUUID().toString(), "COMP101", "Introdução à Programação", 60, "Disciplina introdutória de programação."));
@@ -35,7 +33,6 @@ public class DisciplinaRepository {
         }
     }
 
-    // Método estático para obter a instância Singleton
     public static synchronized DisciplinaRepository getInstance() {
         if (instance == null) {
             instance = new DisciplinaRepository();
@@ -43,7 +40,6 @@ public class DisciplinaRepository {
         return instance;
     }
 
-    // Carrega disciplinas do arquivo JSON
     private List<Disciplina> carregarDisciplinasDoArquivo() {
         File file = new File(DATA_FILE);
         if (file.exists() && file.length() > 0) {
@@ -57,7 +53,6 @@ public class DisciplinaRepository {
         return new ArrayList<>();
     }
 
-    // Salva disciplinas no arquivo JSON
     private void salvarDisciplinasNoArquivo() {
         try {
             objectMapper.writeValue(new File(DATA_FILE), disciplinas);

@@ -12,19 +12,17 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class AssociacaoDisciplinaUsuarioRepository {
-    private static AssociacaoDisciplinaUsuarioRepository instance; // Instância Singleton
-    private List<AssociacaoDisciplinaUsuario> associacoes; // Simula o banco de dados de associações
-    private final String DATA_FILE = "associacoes.json"; // Nome do arquivo para associações
+    private static AssociacaoDisciplinaUsuarioRepository instance;
+    private List<AssociacaoDisciplinaUsuario> associacoes;
+    private final String DATA_FILE = "associacoes.json";
     private ObjectMapper objectMapper;
 
-    // Construtor privado para o Singleton
     private AssociacaoDisciplinaUsuarioRepository() {
         this.objectMapper = new ObjectMapper();
         this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
         this.associacoes = carregarAssociacoesDoArquivo();
 
-        // Não adiciona associações padrão aqui, pois elas dependem de usuários e disciplinas existentes.
         if (this.associacoes.isEmpty()) {
             System.out.println("DEBUG: Arquivo de associações vazio ou não encontrado.");
         } else {
@@ -32,7 +30,6 @@ public class AssociacaoDisciplinaUsuarioRepository {
         }
     }
 
-    // Método estático para obter a instância Singleton
     public static synchronized AssociacaoDisciplinaUsuarioRepository getInstance() {
         if (instance == null) {
             instance = new AssociacaoDisciplinaUsuarioRepository();
@@ -40,7 +37,6 @@ public class AssociacaoDisciplinaUsuarioRepository {
         return instance;
     }
 
-    // Carrega associações do arquivo JSON
     private List<AssociacaoDisciplinaUsuario> carregarAssociacoesDoArquivo() {
         File file = new File(DATA_FILE);
         if (file.exists() && file.length() > 0) {
@@ -54,7 +50,6 @@ public class AssociacaoDisciplinaUsuarioRepository {
         return new ArrayList<>();
     }
 
-    // Salva associações no arquivo JSON
     private void salvarAssociacoesNoArquivo() {
         try {
             objectMapper.writeValue(new File(DATA_FILE), associacoes);
@@ -112,7 +107,6 @@ public class AssociacaoDisciplinaUsuarioRepository {
         System.out.println("DEBUG: Associação excluída: " + id);
     }
 
-    // NOVO: Método para verificar se uma associação específica já existe
     public boolean associacaoExiste(String idDisciplina, String idUsuario, String papelUsuario) {
         return associacoes.stream()
                 .anyMatch(a -> a.getIdDisciplina().equals(idDisciplina) &&

@@ -17,11 +17,10 @@ public class PlanoDeEnsinoService extends Observable {
     private static PlanoDeEnsinoService instance;
     private PlanoDeEnsinoRepository repository;
     private UserService userService;
-    private ComentarioService comentarioService; // NOVO: Atributo para o ComentarioService
+    private ComentarioService comentarioService;
 
     private final String PDF_UPLOAD_DIR = "planos_pdf";
 
-    // Construtor privado para o Singleton
     private PlanoDeEnsinoService() {
         this.repository = PlanoDeEnsinoRepository.getInstance();
         this.userService = UserService.getInstance();
@@ -29,7 +28,6 @@ public class PlanoDeEnsinoService extends Observable {
         criarPastaPdfs();
     }
 
-    // Método estático para obter a instância Singleton
     public static synchronized PlanoDeEnsinoService getInstance() {
         if (instance == null) {
             instance = new PlanoDeEnsinoService();
@@ -37,7 +35,6 @@ public class PlanoDeEnsinoService extends Observable {
         return instance;
     }
 
-    // Getter público para a pasta de upload de PDFs
     public String getPdfUploadDir() {
         return PDF_UPLOAD_DIR;
     }
@@ -77,7 +74,6 @@ public class PlanoDeEnsinoService extends Observable {
             throw new IllegalStateException("Nenhum usuário logado.");
         }
 
-        // Validação de negócio
         if (plano.getCodigoDisciplina() == null || plano.getCodigoDisciplina().isEmpty()) {
             throw new IllegalArgumentException("Código da disciplina é obrigatório para o plano.");
         }
@@ -85,13 +81,11 @@ public class PlanoDeEnsinoService extends Observable {
             throw new IllegalArgumentException("Nome da disciplina é obrigatório.");
         }
 
-        // Lógica para lidar com o PDF
-        if (pdfFile != null) { // Se um novo PDF foi selecionado
+        if (pdfFile != null) {
             if (!pdfFile.getName().toLowerCase().endsWith(".pdf")) {
                 throw new IllegalArgumentException("O arquivo selecionado não é um PDF válido.");
             }
             try {
-                // Se já existe um PDF associado e estamos atualizando, podemos excluir o antigo
                 if (plano.getId() != null && !plano.getId().isEmpty()) {
                     Optional<PlanoDeEnsino> existingPlanoOpt = repository.buscarPorId(plano.getId());
                     existingPlanoOpt.ifPresent(existingPlano -> {
@@ -105,30 +99,24 @@ public class PlanoDeEnsinoService extends Observable {
                 throw new RuntimeException("Erro ao copiar arquivo PDF: " + e.getMessage(), e);
             }
         } else if (plano.getId() == null || plano.getId().isEmpty()) {
-            // Para novos planos, o PDF é obrigatório
             throw new IllegalArgumentException("Um arquivo PDF é obrigatório para um novo plano de ensino.");
         } else {
-            // Se for uma atualização e nenhum novo PDF foi selecionado, mantém o caminho do PDF existente
             Optional<PlanoDeEnsino> existingPlanoOpt = repository.buscarPorId(plano.getId());
             existingPlanoOpt.ifPresent(existingPlano -> plano.setCaminhoPdf(existingPlano.getCaminhoPdf()));
         }
 
-
-        // Controle de acesso para criar/atualizar
-        if (plano.getId() == null || plano.getId().isEmpty()) { // Novo plano
+        if (plano.getId() == null || plano.getId().isEmpty()) {
             if (!"Professor".equalsIgnoreCase(currentUser.getPapel()) && !"Coordenador".equalsIgnoreCase(currentUser.getPapel()) && !"Diretor".equalsIgnoreCase(currentUser.getPapel())) {
                 throw new SecurityException("Apenas Professores, Coordenadores e Diretores podem criar planos de ensino.");
             }
-            plano.setProfessorResponsavel(currentUser.getNomeUsuario()); // Associa o plano ao professor logado
-        } else { // Atualizando plano existente
+            plano.setProfessorResponsavel(currentUser.getNomeUsuario());
+        } else {
             Optional<PlanoDeEnsino> existingPlanoOpt = repository.buscarPorId(plano.getId());
             if (existingPlanoOpt.isPresent()) {
                 PlanoDeEnsino existingPlano = existingPlanoOpt.get();
-                // Professor só pode atualizar seus próprios planos
                 if ("Professor".equalsIgnoreCase(currentUser.getPapel()) && !existingPlano.getProfessorResponsavel().equals(currentUser.getNomeUsuario())) {
                     throw new SecurityException("Você só pode editar planos de ensino que você é responsável.");
                 }
-                // Coordenador e Diretor podem atualizar qualquer plano
                 if (!"Coordenador".equalsIgnoreCase(currentUser.getPapel()) && !"Diretor".equalsIgnoreCase(currentUser.getPapel()) && !"Professor".equalsIgnoreCase(currentUser.getPapel())) {
                     throw new SecurityException("Você não tem permissão para editar planos de ensino.");
                 }
@@ -149,7 +137,6 @@ public class PlanoDeEnsinoService extends Observable {
         return repository.buscarTodos();
     }
 
-    // Modificado: excluirPlano agora verifica permissão e exclui PDF físico e comentários
     public void excluirPlano(String id) {
         Usuario currentUser = userService.getCurrentUser();
         if (currentUser == null) {
@@ -159,7 +146,6 @@ public class PlanoDeEnsinoService extends Observable {
         Optional<PlanoDeEnsino> planoOpt = repository.buscarPorId(id);
         if (planoOpt.isPresent()) {
             PlanoDeEnsino plano = planoOpt.get();
-            // Controle de acesso para exclusão
             if ("Professor".equalsIgnoreCase(currentUser.getPapel()) && !plano.getProfessorResponsavel().equals(currentUser.getNomeUsuario())) {
                 throw new SecurityException("Você só pode excluir planos de ensino que você é responsável.");
             }
@@ -167,12 +153,11 @@ public class PlanoDeEnsinoService extends Observable {
                 throw new SecurityException("Você não tem permissão para excluir planos de ensino.");
             }
 
-            // NOVO: Exclui todos os comentários associados a este plano ANTES de excluir o plano em si
             getComentarioService().excluirComentariosDoPlano(id);
 
-            repository.excluir(id); // Exclui o plano do repositório
-            excluirPdfFisico(plano.getCaminhoPdf()); // Exclui o arquivo PDF físico
-            notifyObservers(repository.buscarTodos()); // Notifica os observadores
+            repository.excluir(id);
+            excluirPdfFisico(plano.getCaminhoPdf());
+            notifyObservers(repository.buscarTodos());
         } else {
             throw new IllegalArgumentException("Plano de ensino não encontrado para exclusão.");
         }
@@ -186,11 +171,10 @@ public class PlanoDeEnsinoService extends Observable {
 
         Optional<PlanoDeEnsino> planoOpt = repository.buscarPorId(id);
         planoOpt.ifPresent(plano -> {
-            // Professor só pode submeter seus próprios planos
             if ("Professor".equalsIgnoreCase(currentUser.getPapel()) && !plano.getProfessorResponsavel().equals(currentUser.getNomeUsuario())) {
                 throw new SecurityException("Você só pode submeter planos de ensino que você é responsável.");
             }
-            if (!"Professor".equalsIgnoreCase(currentUser.getPapel())) { // Apenas professor pode submeter
+            if (!"Professor".equalsIgnoreCase(currentUser.getPapel())) {
                 throw new SecurityException("Apenas Professores podem submeter planos de ensino.");
             }
 
@@ -210,7 +194,6 @@ public class PlanoDeEnsinoService extends Observable {
             throw new IllegalStateException("Nenhum usuário logado.");
         }
 
-        // Apenas Coordenador e Diretor podem aprovar
         if (!"Coordenador".equalsIgnoreCase(currentUser.getPapel()) && !"Diretor".equalsIgnoreCase(currentUser.getPapel())) {
             throw new SecurityException("Apenas Coordenadores e Diretores podem aprovar planos de ensino.");
         }

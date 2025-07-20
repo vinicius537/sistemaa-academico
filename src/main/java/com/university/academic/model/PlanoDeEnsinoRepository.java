@@ -11,19 +11,17 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class PlanoDeEnsinoRepository {
-    private static PlanoDeEnsinoRepository instance; // Instância Singleton
-    private List<PlanoDeEnsino> planos; // Simula o banco de dados
-    private final String DATA_FILE = "planos_ensino.json"; // NOVO: Nome do arquivo para planos
-    private ObjectMapper objectMapper; // Objeto Jackson para serialização/desserialização
+    private static PlanoDeEnsinoRepository instance;
+    private List<PlanoDeEnsino> planos;
+    private final String DATA_FILE = "planos_ensino.json";
+    private ObjectMapper objectMapper;
 
-    // Construtor privado para o Singleton
     private PlanoDeEnsinoRepository() {
         this.objectMapper = new ObjectMapper();
-        this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT); // Formata o JSON de forma legível
+        this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
-        this.planos = carregarPlanosDoArquivo(); // Tenta carregar planos do arquivo ao iniciar
+        this.planos = carregarPlanosDoArquivo();
 
-        // Se o arquivo estiver vazio ou não existir, inicializa com alguns dados de exemplo
         if (this.planos.isEmpty()) {
             System.out.println("DEBUG: Arquivo de planos vazio ou não encontrado. Inicializando com planos padrão.");
             planos.add(new PlanoDeEnsino(UUID.randomUUID().toString(), "COMP123", "Programação Orientada a Objetos",
@@ -38,7 +36,6 @@ public class PlanoDeEnsinoRepository {
         }
     }
 
-    // Método estático para obter a instância Singleton
     public static synchronized PlanoDeEnsinoRepository getInstance() {
         if (instance == null) {
             instance = new PlanoDeEnsinoRepository();
@@ -46,7 +43,6 @@ public class PlanoDeEnsinoRepository {
         return instance;
     }
 
-    // NOVO: Método para carregar planos do arquivo JSON
     private List<PlanoDeEnsino> carregarPlanosDoArquivo() {
         File file = new File(DATA_FILE);
         if (file.exists() && file.length() > 0) {
@@ -60,7 +56,6 @@ public class PlanoDeEnsinoRepository {
         return new ArrayList<>();
     }
 
-    // NOVO: Método para salvar planos no arquivo JSON
     private void salvarPlanosNoArquivo() {
         try {
             objectMapper.writeValue(new File(DATA_FILE), planos);
@@ -88,7 +83,7 @@ public class PlanoDeEnsinoRepository {
                 planos.add(plano);
             }
         }
-        salvarPlanosNoArquivo(); // Salva as alterações no arquivo após cada operação
+        salvarPlanosNoArquivo();
         System.out.println("DEBUG: Plano salvo/atualizado: " + plano.getNomeDisciplina());
     }
 
@@ -102,7 +97,7 @@ public class PlanoDeEnsinoRepository {
 
     public void excluir(String id) {
         planos.removeIf(p -> p.getId().equals(id));
-        salvarPlanosNoArquivo(); // Salva as alterações no arquivo após cada exclusão
+        salvarPlanosNoArquivo();
         System.out.println("DEBUG: Plano excluído: " + id);
     }
 }

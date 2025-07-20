@@ -10,11 +10,9 @@ public class Disciplina {
     private int cargaHoraria;
     private String descricao;
 
-    // Construtor padrão para desserialização do Jackson
     public Disciplina() {
     }
 
-    // Construtor completo
     public Disciplina(String id, String codigo, String nome, int cargaHoraria, String descricao) {
         this.id = id;
         this.codigo = codigo;
@@ -23,12 +21,10 @@ public class Disciplina {
         this.descricao = descricao;
     }
 
-    // Construtor para novas disciplinas (ID será gerado)
     public Disciplina(String codigo, String nome, int cargaHoraria, String descricao) {
         this(null, codigo, nome, cargaHoraria, descricao);
     }
 
-    // Getters e Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     public String getCodigo() { return codigo; }

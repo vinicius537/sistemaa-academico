@@ -45,7 +45,6 @@ public class LoginController {
                 userService.setUsuarioLogado(usuarioOpt.get());
 
                 lblMessage.setText("Login bem-sucedido!");
-                // CORREÇÃO AQUI: Adicionado o terceiro argumento 'false'
                 sceneManager.loadScene("/com/university/academic/view/PlanoDeEnsinoListView.fxml", "Sistema de Gestão de Planos de Ensino", false);
             } else {
                 lblMessage.setText("Usuário ou senha inválidos.");
@@ -60,7 +59,6 @@ public class LoginController {
 
     @FXML
     private void handleRegister(ActionEvent event) {
-        // CORREÇÃO AQUI: Adicionado o terceiro argumento 'false'
         sceneManager.loadScene("/com/university/academic/view/RegisterView.fxml", "Registrar Novo Usuário", false);
     }
 

@@ -12,11 +12,9 @@ public class AssociacaoDisciplinaUsuario {
     private String papelUsuario; // Papel do usuário na associação (ex: "Professor", "Estudante")
     private String idPlanoDeEnsino; // ID do Plano de Ensino associado (opcional, para Professor)
 
-    // Construtor padrão para desserialização do Jackson
     public AssociacaoDisciplinaUsuario() {
     }
 
-    // Construtor completo
     public AssociacaoDisciplinaUsuario(String id, String idDisciplina, String nomeDisciplina, String idUsuario, String nomeUsuario, String papelUsuario, String idPlanoDeEnsino) {
         this.id = id;
         this.idDisciplina = idDisciplina;
@@ -27,12 +25,10 @@ public class AssociacaoDisciplinaUsuario {
         this.idPlanoDeEnsino = idPlanoDeEnsino;
     }
 
-    // Construtor para novas associações (ID será gerado, plano de ensino opcional)
     public AssociacaoDisciplinaUsuario(String idDisciplina, String nomeDisciplina, String idUsuario, String nomeUsuario, String papelUsuario) {
         this(null, idDisciplina, nomeDisciplina, idUsuario, nomeUsuario, papelUsuario, null);
     }
 
-    // Getters e Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     public String getIdDisciplina() { return idDisciplina; }

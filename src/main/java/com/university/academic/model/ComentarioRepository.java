@@ -18,7 +18,6 @@ public class ComentarioRepository {
     private final String DATA_FILE = "comentarios.json";
     private ObjectMapper objectMapper;
 
-    // Construtor privado para o Singleton
     private ComentarioRepository() {
         this.objectMapper = new ObjectMapper();
         this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -33,7 +32,6 @@ public class ComentarioRepository {
         }
     }
 
-    // Método estático para obter a instância Singleton
     public static synchronized ComentarioRepository getInstance() {
         if (instance == null) {
             instance = new ComentarioRepository();
@@ -41,7 +39,6 @@ public class ComentarioRepository {
         return instance;
     }
 
-    // Carrega comentários do arquivo JSON
     private List<Comentario> carregarComentariosDoArquivo() {
         File file = new File(DATA_FILE);
         if (file.exists() && file.length() > 0) {
@@ -55,7 +52,6 @@ public class ComentarioRepository {
         return new ArrayList<>();
     }
 
-    // Salva comentários no arquivo JSON
     private void salvarComentariosNoArquivo() {
         try {
             objectMapper.writeValue(new File(DATA_FILE), comentarios);

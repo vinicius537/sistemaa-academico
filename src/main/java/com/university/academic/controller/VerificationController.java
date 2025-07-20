@@ -15,18 +15,15 @@ public class VerificationController {
 
     private UserService userService;
     private SceneManager sceneManager;
-    private Usuario userToVerify; // Usuário que precisa ser verificado
-    private String generatedCode; // Código gerado para verificação (simulado)
+    private Usuario userToVerify;
+    private String generatedCode;
 
     public VerificationController() {
         this.userService = UserService.getInstance();
         this.sceneManager = SceneManager.getInstance();
-        // Em um sistema real, o código seria gerado e enviado por email/SMS
-        // Para simulação, vamos gerar um código fixo ou simples
         this.generatedCode = "123456"; // Código de verificação fixo para teste
     }
 
-    // Método para injetar o usuário a ser verificado
     public void setUserToVerify(Usuario user) {
         this.userToVerify = user;
         System.out.println("DEBUG: Usuário para verificação: " + user.getNomeUsuario());

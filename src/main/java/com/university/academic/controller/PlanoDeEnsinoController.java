@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class PlanoDeEnsinoController implements Observer {
-    // Componentes da tela de listagem (PlanoDeEnsinoListView.fxml)
     @FXML private TableView<PlanoDeEnsino> tabelaPlanos;
     @FXML private TableColumn<PlanoDeEnsino, String> colCodigoDisciplina;
     @FXML private TableColumn<PlanoDeEnsino, String> colNomeDisciplina;
@@ -36,7 +35,6 @@ public class PlanoDeEnsinoController implements Observer {
     @FXML private TableColumn<PlanoDeEnsino, String> colStatus;
     @FXML private TableColumn<PlanoDeEnsino, Void> colAcoes;
 
-    // Componentes do formulário de plano de ensino (PlanoDeEnsinoFormView.fxml)
     @FXML private Label lblTituloForm;
     @FXML private TextField txtId;
     @FXML private TextField txtCodigoDisciplina;
@@ -53,7 +51,6 @@ public class PlanoDeEnsinoController implements Observer {
     @FXML private TextField txtCaminhoPdf;
     @FXML private Button btnSelecionarPdf;
 
-    // Botões da tela principal (PlanoDeEnsinoListView.fxml)
     @FXML private Button btnMeuPerfil;
     @FXML private Button btnNovoPlano;
     @FXML private Button btnGerenciarUsuarios;
@@ -79,7 +76,7 @@ public class PlanoDeEnsinoController implements Observer {
         if (tabelaPlanos != null) {
             configurarTabela();
             carregarPlanosNaTabela();
-            configurarAcessoPorPapel(); // Chamada para configurar o acesso
+            configurarAcessoPorPapel();
         }
         if (txtProfessorResponsavel != null) {
             Usuario currentUser = userService.getCurrentUser();

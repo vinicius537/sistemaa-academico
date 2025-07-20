@@ -10,7 +10,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.university.academic.Main; // NOVO: Importa a classe Main para usar seu ClassLoader
+import com.university.academic.Main;
 
 public class SceneManager {
     private static SceneManager instance;
@@ -30,12 +30,6 @@ public class SceneManager {
         this.primaryStage = primaryStage;
     }
 
-    /**
-     * Carrega e exibe uma nova cena no Stage principal.
-     * @param fxmlPath O caminho para o arquivo FXML da cena a ser carregada (ex: "/com/university/academic/view/LoginView.fxml").
-     * @param title O título da janela.
-     * @param cacheScene Se true, a cena será armazenada em cache para reutilização.
-     */
     public void loadScene(String fxmlPath, String title, boolean cacheScene) {
         try {
             Parent root;
@@ -43,11 +37,8 @@ public class SceneManager {
                 root = sceneCache.get(fxmlPath);
                 System.out.println("DEBUG: Carregando cena do cache: " + fxmlPath);
             } else {
-                // CORREÇÃO FINAL AQUI: Usando o ClassLoader da classe Main (ou de qualquer classe no mesmo pacote raiz)
-                // e o caminho com a barra inicial. Esta é a forma mais comum e robusta em JavaFX.
                 URL fxmlUrl = Main.class.getResource(fxmlPath);
 
-                // Adicionando mais DEBUG para ver o que está acontecendo
                 System.out.println("DEBUG - Tentando carregar FXML:");
                 System.out.println("→ Caminho FXML: " + fxmlPath);
                 System.out.println("→ URL encontrada: " + fxmlUrl);

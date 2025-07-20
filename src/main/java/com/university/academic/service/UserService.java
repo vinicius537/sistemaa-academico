@@ -3,7 +3,6 @@ package com.university.academic.service;
 import com.university.academic.model.Usuario;
 import com.university.academic.model.UserRepository;
 
-// NOVOS IMPORTS
 import java.time.LocalDateTime;
 import java.util.Random;
 
@@ -35,7 +34,6 @@ public class UserService {
         if (usuarioOpt.isPresent()) {
             Usuario usuario = usuarioOpt.get();
 
-            // Lembrete: A forma correta aqui seria usar hashing (ex: BCrypt.checkpw(senha, usuario.getSenha()))
             if (usuario.getSenha().equals(senha)) {
                 if (!usuario.isVerified()) {
                     System.out.println("DEBUG: Autenticação falhou: Usuário não verificado.");
@@ -50,17 +48,7 @@ public class UserService {
         return Optional.empty();
     }
 
-    // --- MÉTODOS PARA RECUPERAÇÃO DE SENHA ---
-
-    /**
-     * Inicia o processo de reset de senha para um usuário com base no e-mail.
-     * Gera um código de 6 dígitos, define uma validade de 15 minutos e o salva no usuário.
-     * @param email O e-mail da conta para a qual a senha será redefinida.
-     * @return Um Optional contendo o código de 6 dígitos gerado, para ser exibido no console.
-     * @throws IllegalArgumentException se nenhum usuário for encontrado com o e-mail fornecido.
-     */
     public Optional<String> iniciarResetDeSenha(String email) {
-        // AÇÃO NECESSÁRIA: Você precisa implementar o método buscarPorEmail no seu UserRepository
         Optional<Usuario> usuarioOpt = userRepository.buscarPorEmail(email);
 
         if (usuarioOpt.isEmpty()) {
@@ -68,27 +56,20 @@ public class UserService {
         }
 
         Usuario usuario = usuarioOpt.get();
-        String codigo = String.format("%06d", new Random().nextInt(999999)); // Gera código de 6 dígitos com zeros à esquerda se necessário
-        LocalDateTime validade = LocalDateTime.now().plusMinutes(15); // Define a validade para 15 minutos a partir de agora
+        String codigo = String.format("%06d", new Random().nextInt(999999));
+        LocalDateTime validade = LocalDateTime.now().plusMinutes(15);
 
         usuario.setCodigoRecuperacao(codigo);
         usuario.setValidadeCodigoRecuperacao(validade);
-        userRepository.salvar(usuario); // Salva o usuário com o novo código e a validade
+        userRepository.salvar(usuario);
 
         System.out.println("DEBUG: Código de recuperação " + codigo + " gerado para " + usuario.getNomeUsuario());
 
         return Optional.of(codigo);
     }
 
-    /**
-     * Finaliza o processo de reset de senha usando o código e a nova senha.
-     * @param codigoRecuperacao O código de 6 dígitos que o usuário informou.
-     * @param novaSenha A nova senha que o usuário deseja definir.
-     * @throws IllegalArgumentException se o código for inválido.
-     * @throws IllegalStateException se o código tiver expirado.
-     */
+
     public void finalizarResetDeSenha(String codigoRecuperacao, String novaSenha) {
-        // AÇÃO NECESSÁRIA: Você precisa implementar o método buscarPorCodigoRecuperacao no seu UserRepository
         Optional<Usuario> usuarioOpt = userRepository.buscarPorCodigoRecuperacao(codigoRecuperacao);
 
         if (usuarioOpt.isEmpty()) {
@@ -98,31 +79,21 @@ public class UserService {
         Usuario usuario = usuarioOpt.get();
 
         if (usuario.getValidadeCodigoRecuperacao().isBefore(LocalDateTime.now())) {
-            // Limpa o código expirado para segurança
             usuario.setCodigoRecuperacao(null);
             usuario.setValidadeCodigoRecuperacao(null);
             userRepository.salvar(usuario);
             throw new IllegalStateException("Seu código de recuperação expirou. Por favor, solicite um novo.");
         }
 
-        // Reutiliza sua validação de política de senha
         validatePasswordPolicy(novaSenha);
-
-        // ATENÇÃO: Lembre-se de usar hashing aqui!
-        // Exemplo: String senhaHasheada = BCrypt.hashpw(novaSenha, BCrypt.gensalt());
-        //          usuario.setSenha(senhaHasheada);
         usuario.setSenha(novaSenha);
 
-        // Limpa os campos de recuperação para que o código não possa ser usado novamente
         usuario.setCodigoRecuperacao(null);
         usuario.setValidadeCodigoRecuperacao(null);
         userRepository.salvar(usuario);
 
         System.out.println("DEBUG: Senha redefinida com sucesso para o usuário " + usuario.getNomeUsuario());
     }
-
-
-    // --- SEUS MÉTODOS EXISTENTES (sem alterações) ---
 
     public Usuario getUsuarioLogado() {
         return currentUser;
@@ -191,7 +162,6 @@ public class UserService {
         } else {
             matricula = null;
         }
-
         validatePasswordPolicy(senha);
 
         Usuario novoUsuario = new Usuario(nomeUsuario, senha, email, papel, matricula);
