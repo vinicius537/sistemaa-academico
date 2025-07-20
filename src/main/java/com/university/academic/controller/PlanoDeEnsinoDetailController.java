@@ -9,7 +9,7 @@ import com.university.academic.service.PlanoDeEnsinoService;
 import com.university.academic.service.SceneManager;
 import com.university.academic.service.UserService;
 
-import javafx.application.Platform; // Para rodar atualizações na UI thread
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -25,10 +25,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.stage.FileChooser; // Import para FileChooser
-import javafx.stage.Stage; // Import para Stage (para FileChooser e fechar a própria janela)
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
-import java.io.File; // Import para File
+import java.io.File;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
@@ -111,7 +111,6 @@ public class PlanoDeEnsinoDetailController implements Observer {
             txtBibliografiaComplementar.setText(planoAtual.getBibliografiaComplementar());
             txtCaminhoPdf.setText(planoAtual.getCaminhoPdf() != null ? planoAtual.getCaminhoPdf() : "Nenhum arquivo associado");
 
-            // Habilita/desabilita o botão Ver PDF
             btnVerPdf.setDisable(planoAtual.getCaminhoPdf() == null || planoAtual.getCaminhoPdf().isEmpty() || !"Aprovado".equals(planoAtual.getStatus()));
         }
     }
@@ -140,7 +139,6 @@ public class PlanoDeEnsinoDetailController implements Observer {
         }
     }
 
-    // Carrega e exibe os comentários na VBox
     private void carregarComentarios() {
         if (planoAtual == null) return;
 
@@ -148,7 +146,7 @@ public class PlanoDeEnsinoDetailController implements Observer {
 
         List<Comentario> comentariosPrincipais = todosComentariosDoPlano.stream()
                 .filter(c -> c.getIdComentarioPai() == null || c.getIdComentarioPai().isEmpty())
-                .sorted(Comparator.comparing(Comentario::getDataHora)) // Ordena por data
+                .sorted(Comparator.comparing(Comentario::getDataHora))
                 .collect(Collectors.toList());
 
         vboxComentarios.getChildren().clear();
@@ -161,27 +159,25 @@ public class PlanoDeEnsinoDetailController implements Observer {
             for (Comentario comentario : comentariosPrincipais) {
                 adicionarComentarioNaUI(comentario, 0);
 
-                // Adiciona respostas
                 List<Comentario> respostas = todosComentariosDoPlano.stream()
                         .filter(c -> comentario.getId().equals(c.getIdComentarioPai()))
                         .sorted(Comparator.comparing(Comentario::getDataHora))
                         .collect(Collectors.toList());
                 for (Comentario resposta : respostas) {
-                    adicionarComentarioNaUI(resposta, 1); // Nível 1 para respostas
+                    adicionarComentarioNaUI(resposta, 1);
                 }
             }
         }
     }
 
-    // Adiciona um comentário (ou resposta) à UI
     private void adicionarComentarioNaUI(Comentario comentario, int nivelIndentacao) {
         VBox comentarioBox = new VBox(5);
         comentarioBox.setPadding(new Insets(5));
         comentarioBox.setStyle("-fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-background-color: #f9f9f9; -fx-background-radius: 5; -fx-border-radius: 5;");
-        comentarioBox.setPrefWidth(Double.MAX_VALUE); // Para que o VBox se expanda horizontalmente
+        comentarioBox.setPrefWidth(Double.MAX_VALUE);
 
         if (nivelIndentacao > 0) {
-            comentarioBox.setPadding(new Insets(5, 5, 5, 20 * nivelIndentacao)); // Adiciona padding à esquerda
+            comentarioBox.setPadding(new Insets(5, 5, 5, 20 * nivelIndentacao));
             comentarioBox.setStyle("-fx-border-color: #d0d0d0; -fx-border-width: 1; -fx-background-color: #f0f0f0; -fx-background-radius: 5; -fx-border-radius: 5;");
         }
 
@@ -197,10 +193,10 @@ public class PlanoDeEnsinoDetailController implements Observer {
         headerBox.getChildren().addAll(autorLabel, dataHoraLabel);
 
         TextFlow contentTextFlow = new TextFlow(new Text(comentario.getConteudo()));
-        contentTextFlow.setPrefWidth(Double.MAX_VALUE); // Permite que o TextFlow se expanda
+        contentTextFlow.setPrefWidth(Double.MAX_VALUE);
 
         HBox actionBox = new HBox(5);
-        actionBox.setAlignment(Pos.CENTER_RIGHT); // Alinha botões à direita
+        actionBox.setAlignment(Pos.CENTER_RIGHT);
 
         Usuario currentUser = userService.getCurrentUser();
         if (currentUser != null) {
@@ -217,11 +213,11 @@ public class PlanoDeEnsinoDetailController implements Observer {
             }
 
             boolean canDelete = false;
-            if (comentario.getIdAutor().equals(currentUser.getId())) { // É o próprio autor
+            if (comentario.getIdAutor().equals(currentUser.getId())) {
                 canDelete = true;
-            } else if ("Coordenador".equalsIgnoreCase(currentUser.getPapel()) || "Diretor".equalsIgnoreCase(currentUser.getPapel())) { // Coordenador/Diretor
+            } else if ("Coordenador".equalsIgnoreCase(currentUser.getPapel()) || "Diretor".equalsIgnoreCase(currentUser.getPapel())) {
                 canDelete = true;
-            } else if ("Professor".equalsIgnoreCase(currentUser.getPapel())) { // Professor
+            } else if ("Professor".equalsIgnoreCase(currentUser.getPapel())) {
                 Optional<PlanoDeEnsino> planoOpt = planoDeEnsinoService.buscarPlanoPorId(comentario.getIdPlanoDeEnsino());
                 if (planoOpt.isPresent() && planoOpt.get().getProfessorResponsavel().equals(currentUser.getNomeUsuario())) {
                     canDelete = true;
@@ -331,7 +327,6 @@ public class PlanoDeEnsinoDetailController implements Observer {
         }
     }
 
-    // Método do padrão Observer: Atualiza a lista de comentários quando o ComentarioService notifica
     @Override
     @SuppressWarnings("unchecked")
     public void update(Object data) {
